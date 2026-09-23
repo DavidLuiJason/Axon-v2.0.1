@@ -62,7 +62,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             aria-label="AXON options"
             className="h-9 px-3.5 rounded-full bg-[#232428] hover:bg-[#2C2D32] text-white flex items-center gap-1.5 transition-all active:scale-95 border border-white/5 shadow-sm"
           >
-            <span className="font-serif font-semibold tracking-wider text-sm">AXON</span>
+            <span className="font-serif font-bold tracking-wider text-sm">AXON</span>
             <ChevronDown size={14} className={`text-[#9A9B9F] transition-transform duration-200 ${isAxonMenuOpen ? 'rotate-180' : ''}`} />
           </button>
 

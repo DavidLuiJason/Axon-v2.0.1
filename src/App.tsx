@@ -219,7 +219,9 @@ export default function App() {
       {/* 2. INDEPENDENT SCROLLING VIEWPORT AREA */}
       <main
         ref={scrollContainerRef}
-        className="flex-1 w-full overflow-y-auto overflow-x-hidden pt-16 pb-36 flex flex-col justify-between"
+        className={`flex-1 w-full overflow-y-auto overflow-x-hidden ${
+          activeChatId ? 'pt-16 pb-36 flex flex-col justify-between' : 'flex flex-col'
+        }`}
       >
         {activeChatId ? (
           // Active Conversation State (Image 2)
