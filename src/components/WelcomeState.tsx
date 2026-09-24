@@ -18,7 +18,7 @@ export const WelcomeState: React.FC<WelcomeStateProps> = ({
       {/* Unit anchored with the Welcome headline at the true vertical center */}
       <div className="relative flex flex-col items-center">
         {/* Central AXON Tree Logo positioned directly above the text (-40% scaled: 50px) */}
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3.5 flex items-center justify-center pointer-events-none">
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-[7px] flex items-center justify-center pointer-events-none">
           <AxonLogo className="w-[50px] h-[50px]" />
         </div>
 
