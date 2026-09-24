@@ -16,7 +16,7 @@ import {
   Compass,
   FileText
 } from 'lucide-react';
-import { AxonLogo } from './AxonLogo';
+import AxonLogo from './AxonLogo.jsx';
 import { RecentChat } from '../types';
 
 interface NavigationDrawerProps {
@@ -65,7 +65,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           {/* Header: Logo, Brand lockup, and Search trigger */}
           <div className="flex items-center justify-between pb-5 border-b border-white/5 mb-3">
             <div className="flex items-center gap-3">
-              <AxonLogo size={34} />
+              <AxonLogo className="w-[34px] h-[34px] shrink-0" />
               <div className="flex flex-col">
                 <span className="font-serif text-[22px] font-semibold tracking-wide text-white leading-tight">
                   AXON

@@ -6,7 +6,7 @@
 import React from 'react';
 import { X, CheckCircle2, ShieldCheck, Palette, Layout, Cpu } from 'lucide-react';
 import { AXON_TOKENS } from '../tokens/designTokens';
-import { AxonLogo } from './AxonLogo';
+import AxonLogo from './AxonLogo.jsx';
 
 interface DesignTokensModalProps {
   isOpen: boolean;
@@ -34,7 +34,7 @@ export const DesignTokensModal: React.FC<DesignTokensModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-white/5">
           <div className="flex items-center gap-3">
-            <AxonLogo size={28} />
+            <AxonLogo className="w-[28px] h-[28px] shrink-0" />
             <div>
               <h2 className="font-serif text-xl font-semibold tracking-wide text-white">AXON Foundation</h2>
               <p className="text-xs text-[#9A9B9F]">Architecture &amp; Design System Tokens</p>

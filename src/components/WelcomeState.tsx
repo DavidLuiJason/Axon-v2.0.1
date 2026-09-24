@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { AxonLogo } from './AxonLogo';
+import AxonLogo from './AxonLogo.jsx';
 
 interface WelcomeStateProps {
   userName?: string;
@@ -14,10 +14,10 @@ export const WelcomeState: React.FC<WelcomeStateProps> = ({
   userName = 'Luidel',
 }) => {
   return (
-    <div className="flex-1 flex flex-col items-center justify-center pt-10 pb-48 px-6 select-none animate-in fade-in duration-300 -translate-y-4 sm:-translate-y-6">
+    <div className="flex-1 flex flex-col items-center justify-center pt-0 pb-64 px-6 select-none animate-in fade-in duration-300 -translate-y-14 sm:-translate-y-20">
       {/* Central AXON Tree Logo */}
       <div className="mb-4">
-        <AxonLogo size={84} />
+        <AxonLogo className="w-[84px] h-[84px]" />
       </div>
 
       {/* Welcome Headline in Elegant Classical Serif */}

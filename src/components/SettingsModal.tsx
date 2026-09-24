@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { X, User, Sliders, Shield, Terminal } from 'lucide-react';
-import { AxonLogo } from './AxonLogo';
+import AxonLogo from './AxonLogo.jsx';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -35,7 +35,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-white/5">
           <div className="flex items-center gap-2.5">
-            <AxonLogo size={24} />
+            <AxonLogo className="w-[24px] h-[24px] shrink-0" />
             <h2 className="font-serif text-lg font-semibold tracking-wide text-white">AXON Settings</h2>
           </div>
           <button
