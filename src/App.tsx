@@ -160,25 +160,17 @@ export default function App() {
     }
   };
 
-  // Logo navigation logic per Prompt Spec:
-  // "Change what tapping the AXON logo mark does on every screen EXCEPT the main chat interface:
-  // - Tapping the logo opens the navigation menu
-  // - If the navigation menu is already open and the logo is tapped again, it navigates to the user's current/active chat
-  // This replaces any prior 'back button' behavior for the logo — do not implement a separate back arrow anywhere."
+  // Logo toggle logic per Spec (v3.3):
+  // - Menu closed + tap logo → menu opens
+  // - Menu open + tap logo → menu closes (stays on whatever screen the user was on — no navigation)
   const handleNonChatLogoClick = () => {
-    if (!isDrawerOpen) {
-      setIsDrawerOpen(true);
-    } else {
-      setIsDrawerOpen(false);
-      setCurrentScreen('chat');
-    }
+    setIsDrawerOpen((prev) => !prev);
   };
 
   // Tapping the logo mark inside the open NavigationDrawer:
   const handleDrawerLogoClick = () => {
-    // Menu is already open; tapping it navigates to user's current/active chat
+    // Menu is open + tap logo → menu closes (stays on whatever screen the user was on)
     setIsDrawerOpen(false);
-    setCurrentScreen('chat');
   };
 
   // Handle sending a message
