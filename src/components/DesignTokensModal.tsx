@@ -12,14 +12,21 @@ interface DesignTokensModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectView: (view: 'welcome' | 'conversation' | 'drawer') => void;
+  onLogoClick?: () => void;
 }
 
 export const DesignTokensModal: React.FC<DesignTokensModalProps> = ({
   isOpen,
   onClose,
   onSelectView,
+  onLogoClick,
 }) => {
   if (!isOpen) return null;
+
+  const handleLogoTap = () => {
+    onClose();
+    onLogoClick?.();
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -34,7 +41,13 @@ export const DesignTokensModal: React.FC<DesignTokensModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-white/5">
           <div className="flex items-center gap-3">
-            <AxonLogo className="w-[28px] h-[28px] shrink-0" />
+            <button
+              onClick={handleLogoTap}
+              aria-label="AXON Navigation"
+              className="cursor-pointer hover:opacity-85 transition-opacity"
+            >
+              <AxonLogo className="w-[28px] h-[28px] shrink-0" />
+            </button>
             <div>
               <h2 className="font-serif text-xl font-semibold tracking-wide text-white">AXON Foundation</h2>
               <p className="text-xs text-[#9A9B9F]">Architecture &amp; Design System Tokens</p>

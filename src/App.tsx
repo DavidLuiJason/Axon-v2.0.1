@@ -11,6 +11,7 @@ import { WelcomeState } from './components/WelcomeState';
 import { ActiveConversation } from './components/ActiveConversation';
 import { DesignTokensModal } from './components/DesignTokensModal';
 import { SettingsModal } from './components/SettingsModal';
+import { AxonSourceScreen } from './components/AxonSourceScreen';
 import { ChatMessage, RecentChat } from './types';
 import { sendQueryToAxonBoundary } from './services/axonBrainInterface';
 
@@ -95,6 +96,7 @@ const INITIAL_RECENTS: RecentChat[] = [
 export default function App() {
   // Navigation & Drawer state
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [currentScreen, setCurrentScreen] = useState<'chat' | 'axon-source'>('chat');
   const [activeChatId, setActiveChatId] = useState<string | null>(null); // null = Welcome state (Image 1)
   const [recents, setRecents] = useState<RecentChat[]>(INITIAL_RECENTS);
 
@@ -131,6 +133,7 @@ export default function App() {
     if (found) {
       setActiveChatId(found.id);
       setMessages(found.messages.length > 0 ? found.messages : INITIAL_REFERENCE_MESSAGES);
+      setCurrentScreen('chat');
     }
   };
 
@@ -139,10 +142,12 @@ export default function App() {
     setActiveChatId(null);
     setMessages([]);
     setComposerInput('');
+    setCurrentScreen('chat');
   };
 
   // Switch to reference state directly (from inspector modal)
   const handleSelectView = (view: 'welcome' | 'conversation' | 'drawer') => {
+    setCurrentScreen('chat');
     if (view === 'welcome') {
       setActiveChatId(null);
       setIsDrawerOpen(false);
@@ -153,6 +158,27 @@ export default function App() {
     } else if (view === 'drawer') {
       setIsDrawerOpen(true);
     }
+  };
+
+  // Logo navigation logic per Prompt Spec:
+  // "Change what tapping the AXON logo mark does on every screen EXCEPT the main chat interface:
+  // - Tapping the logo opens the navigation menu
+  // - If the navigation menu is already open and the logo is tapped again, it navigates to the user's current/active chat
+  // This replaces any prior 'back button' behavior for the logo — do not implement a separate back arrow anywhere."
+  const handleNonChatLogoClick = () => {
+    if (!isDrawerOpen) {
+      setIsDrawerOpen(true);
+    } else {
+      setIsDrawerOpen(false);
+      setCurrentScreen('chat');
+    }
+  };
+
+  // Tapping the logo mark inside the open NavigationDrawer:
+  const handleDrawerLogoClick = () => {
+    // Menu is already open; tapping it navigates to user's current/active chat
+    setIsDrawerOpen(false);
+    setCurrentScreen('chat');
   };
 
   // Handle sending a message
@@ -207,45 +233,57 @@ export default function App() {
 
   return (
     <div className="relative w-full h-screen bg-[#121315] text-[#ECECEC] font-sans antialiased overflow-hidden flex flex-col">
-      {/* 1. ANCHORED PERSISTENT TOP BAR */}
-      <TopBar
-        onOpenDrawer={() => setIsDrawerOpen(true)}
-        onNewChat={handleNewChat}
-        onResetToWelcome={handleNewChat}
-        hasActiveChat={Boolean(activeChatId)}
-        onOpenInfo={() => setIsTokensModalOpen(true)}
-      />
-
-      {/* 2. INDEPENDENT SCROLLING VIEWPORT AREA */}
-      <main
-        ref={scrollContainerRef}
-        className={`flex-1 w-full overflow-y-auto overflow-x-hidden ${
-          activeChatId ? 'pt-16 pb-36 flex flex-col justify-between' : 'flex flex-col'
-        }`}
-      >
-        {activeChatId ? (
-          // Active Conversation State (Image 2)
-          <ActiveConversation
-            messages={messages}
-            onSelectSuggestion={(prompt) => handleSendMessage(prompt)}
+      {currentScreen === 'axon-source' ? (
+        <AxonSourceScreen
+          onLogoClick={handleNonChatLogoClick}
+          recents={recents}
+          userName={userName}
+          selectedModel={selectedModel}
+          activeChatId={activeChatId}
+        />
+      ) : (
+        <>
+          {/* 1. ANCHORED PERSISTENT TOP BAR */}
+          <TopBar
+            onOpenDrawer={() => setIsDrawerOpen(true)}
+            onNewChat={handleNewChat}
+            onResetToWelcome={handleNewChat}
+            hasActiveChat={Boolean(activeChatId)}
+            onOpenInfo={() => setIsTokensModalOpen(true)}
           />
-        ) : (
-          // Welcome / New Chat State (Image 1)
-          <WelcomeState userName={userName} />
-        )}
-      </main>
 
-      {/* 3. ANCHORED PERSISTENT BOTTOM COMPOSER */}
-      <Composer
-        input={composerInput}
-        setInput={setComposerInput}
-        onSend={handleSendMessage}
-        selectedModel={selectedModel}
-        onSelectModel={setSelectedModel}
-        isCompactMode={isCompactMode}
-        onToggleCompactMode={() => setIsTokensModalOpen(true)}
-        disabled={isSending}
-      />
+          {/* 2. INDEPENDENT SCROLLING VIEWPORT AREA */}
+          <main
+            ref={scrollContainerRef}
+            className={`flex-1 w-full overflow-y-auto overflow-x-hidden ${
+              activeChatId ? 'pt-16 pb-36 flex flex-col justify-between' : 'flex flex-col'
+            }`}
+          >
+            {activeChatId ? (
+              // Active Conversation State (Image 2)
+              <ActiveConversation
+                messages={messages}
+                onSelectSuggestion={(prompt) => handleSendMessage(prompt)}
+              />
+            ) : (
+              // Welcome / New Chat State (Image 1)
+              <WelcomeState userName={userName} />
+            )}
+          </main>
+
+          {/* 3. ANCHORED PERSISTENT BOTTOM COMPOSER */}
+          <Composer
+            input={composerInput}
+            setInput={setComposerInput}
+            onSend={handleSendMessage}
+            selectedModel={selectedModel}
+            onSelectModel={setSelectedModel}
+            isCompactMode={isCompactMode}
+            onToggleCompactMode={() => setIsTokensModalOpen(true)}
+            disabled={isSending}
+          />
+        </>
+      )}
 
       {/* 4. NAVIGATION DRAWER OVERLAY (Image 3) */}
       <NavigationDrawer
@@ -256,6 +294,11 @@ export default function App() {
         onSelectRecent={handleSelectRecent}
         onNewChat={handleNewChat}
         onOpenSettings={() => setIsSettingsModalOpen(true)}
+        onOpenAxonSource={() => {
+          setCurrentScreen('axon-source');
+          setIsDrawerOpen(false);
+        }}
+        onLogoClick={handleDrawerLogoClick}
       />
 
       {/* 5. DESIGN TOKENS & ARCHITECTURE MODAL */}
@@ -263,6 +306,7 @@ export default function App() {
         isOpen={isTokensModalOpen}
         onClose={() => setIsTokensModalOpen(false)}
         onSelectView={handleSelectView}
+        onLogoClick={handleNonChatLogoClick}
       />
 
       {/* 6. SETTINGS MODAL */}
@@ -271,6 +315,7 @@ export default function App() {
         onClose={() => setIsSettingsModalOpen(false)}
         userName={userName}
         onUpdateUserName={setUserName}
+        onLogoClick={handleNonChatLogoClick}
       />
     </div>
   );

@@ -12,6 +12,7 @@ interface SettingsModalProps {
   onClose: () => void;
   userName: string;
   onUpdateUserName: (name: string) => void;
+  onLogoClick?: () => void;
 }
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({
@@ -19,8 +20,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   onClose,
   userName,
   onUpdateUserName,
+  onLogoClick,
 }) => {
   if (!isOpen) return null;
+
+  const handleLogoTap = () => {
+    onClose();
+    onLogoClick?.();
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -35,7 +42,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-white/5">
           <div className="flex items-center gap-2.5">
-            <AxonLogo className="w-[24px] h-[24px] shrink-0" />
+            <button
+              onClick={handleLogoTap}
+              aria-label="AXON Navigation"
+              className="cursor-pointer hover:opacity-85 transition-opacity"
+            >
+              <AxonLogo className="w-[24px] h-[24px] shrink-0" />
+            </button>
             <h2 className="font-serif text-lg font-semibold tracking-wide text-white">AXON Settings</h2>
           </div>
           <button

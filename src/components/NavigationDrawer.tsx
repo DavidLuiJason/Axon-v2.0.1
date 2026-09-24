@@ -27,6 +27,8 @@ interface NavigationDrawerProps {
   onSelectRecent: (chatId: string) => void;
   onNewChat: () => void;
   onOpenSettings: () => void;
+  onOpenAxonSource?: () => void;
+  onLogoClick?: () => void;
 }
 
 export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
@@ -37,6 +39,8 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
   onSelectRecent,
   onNewChat,
   onOpenSettings,
+  onOpenAxonSource,
+  onLogoClick,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchInput, setShowSearchInput] = useState(false);
@@ -64,8 +68,18 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
         <div className="flex-1 overflow-y-auto px-4 pt-5 pb-3">
           {/* Header: Logo, Brand lockup, and Search trigger */}
           <div className="flex items-center justify-between pb-5 border-b border-white/5 mb-3">
-            <div className="flex items-center gap-3">
-              <AxonLogo className="w-[34px] h-[34px] shrink-0" />
+            <button
+              onClick={() => {
+                if (onLogoClick) {
+                  onLogoClick();
+                } else {
+                  onClose();
+                }
+              }}
+              aria-label="AXON Navigation"
+              className="flex items-center gap-3 text-left group cursor-pointer"
+            >
+              <AxonLogo className="w-[34px] h-[34px] shrink-0 group-hover:opacity-90 transition-opacity" />
               <div className="flex flex-col">
                 <span className="font-serif text-[22px] font-semibold tracking-wide text-white leading-tight">
                   AXON
@@ -74,7 +88,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
                   Intelligence in Motion
                 </span>
               </div>
-            </div>
+            </button>
 
             {/* Search Icon Trigger */}
             <button
@@ -135,7 +149,10 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
 
             {/* Axon Source */}
             <button
-              onClick={onClose}
+              onClick={() => {
+                onClose();
+                onOpenAxonSource?.();
+              }}
               className="w-full h-11 px-3 rounded-xl flex items-center gap-3.5 text-[#E0E2E6] hover:bg-white/5 transition-colors text-[14.5px]"
             >
               <div className="w-5 h-5 flex items-center justify-center text-[#E85A3C]">
