@@ -344,46 +344,56 @@ export const AxonSourceScreen: React.FC<AxonSourceScreenProps> = ({
 
   return (
     <div className="relative w-full h-full flex flex-col bg-[#121315] text-[#ECECEC] overflow-hidden select-none">
-      {/* 1. TOP HEADER (Visual language matching AXON) */}
-      <header className="h-14 px-4 bg-[#141517] border-b border-white/5 flex items-center justify-between shrink-0 z-20">
-        {/* Left: AXON Logo Mark + Axon Source Branding */}
-        <div className="flex items-center gap-3.5">
-          {/* AXON Logo Mark button (Replaces back button per spec: tapping opens navigation menu) */}
+      {/* 1. TOP HEADER (Restructured into 4 distinct rows to eliminate crowding) */}
+      <header className="px-4 pt-4 pb-3 bg-[#141517] border-b border-white/5 flex flex-col shrink-0 z-20">
+        {/* Row 1: Tree logo + "AXON" wordmark + "Source" title, fully visible, not truncated */}
+        <div className="flex items-center gap-3">
           <button
             onClick={onLogoClick}
             aria-label="AXON Navigation"
             title="Open navigation menu"
-            className="p-1 -ml-1 rounded-xl hover:bg-white/5 active:scale-95 transition-all flex items-center justify-center cursor-pointer group"
+            className="p-1 -ml-1 rounded-xl hover:bg-white/5 active:scale-95 transition-all flex items-center justify-center cursor-pointer group shrink-0"
           >
-            <AxonLogo className="w-[30px] h-[30px] shrink-0 group-hover:opacity-90 transition-opacity" />
+            <AxonLogo className="w-[32px] h-[32px] shrink-0 group-hover:opacity-90 transition-opacity" />
           </button>
 
-          <div className="flex flex-col">
-            <h1 className="font-serif text-[20px] sm:text-[22px] font-semibold tracking-wide text-white leading-tight">
-              Axon Source
-            </h1>
-            <span className="text-[10px] text-[#9A9B9F] tracking-widest font-sans uppercase">
-              Intelligence in Motion · Live Codebase
+          <div className="flex items-center gap-2">
+            <span className="font-serif text-[22px] sm:text-[24px] font-semibold tracking-wide text-white leading-tight">
+              AXON
+            </span>
+            <span className="font-serif text-[22px] sm:text-[24px] font-normal tracking-wide text-[#ECECEC] leading-tight">
+              Source
             </span>
           </div>
         </div>
 
-        {/* Right: Export as ZIP button & Options Popover */}
-        <div className="flex items-center gap-3">
-          {/* Mobile view toggle */}
-          <div className="md:hidden flex items-center bg-[#232428] rounded-lg p-0.5 border border-white/5">
+        {/* Row 2: "INTELLIGENCE IN MOTION · LIVE CODEBASE" subtitle on its own line */}
+        <div className="pt-1">
+          <span className="text-[10px] sm:text-[10.5px] text-[#9A9B9F] tracking-widest font-sans uppercase">
+            Intelligence in Motion · Live Codebase
+          </span>
+        </div>
+
+        {/* Row 3: Tree/Viewer toggle and Export button on their own row with ample padding */}
+        <div className="flex items-center justify-between gap-3 pt-3 pb-1">
+          {/* Tree / Viewer Toggle */}
+          <div className="flex items-center bg-[#232428] rounded-xl p-1 border border-white/5 shadow-inner">
             <button
               onClick={() => setMobileView('tree')}
-              className={`px-2.5 py-1 text-xs rounded-md font-sans transition-colors ${
-                mobileView === 'tree' ? 'bg-[#313339] text-white font-medium' : 'text-[#8E9094]'
+              className={`px-3.5 py-1.5 text-xs rounded-lg font-sans transition-all cursor-pointer ${
+                mobileView === 'tree'
+                  ? 'bg-[#313339] text-white font-medium shadow-xs'
+                  : 'text-[#8E9094] hover:text-[#D0D2D7]'
               }`}
             >
               Tree
             </button>
             <button
               onClick={() => setMobileView('viewer')}
-              className={`px-2.5 py-1 text-xs rounded-md font-sans transition-colors ${
-                mobileView === 'viewer' ? 'bg-[#313339] text-white font-medium' : 'text-[#8E9094]'
+              className={`px-3.5 py-1.5 text-xs rounded-lg font-sans transition-all cursor-pointer ${
+                mobileView === 'viewer'
+                  ? 'bg-[#313339] text-white font-medium shadow-xs'
+                  : 'text-[#8E9094] hover:text-[#D0D2D7]'
               }`}
             >
               Viewer
@@ -396,11 +406,10 @@ export const AxonSourceScreen: React.FC<AxonSourceScreenProps> = ({
               onClick={() => setIsExportMenuOpen(!isExportMenuOpen)}
               disabled={isExporting}
               aria-label="Export source as ZIP"
-              className="h-9 px-3 sm:px-4 rounded-full bg-[#232428] hover:bg-[#2C2D32] text-white text-xs font-medium flex items-center gap-2 border border-white/5 shadow-sm transition-all active:scale-95 disabled:opacity-50"
+              className="h-9 px-4 rounded-full bg-[#232428] hover:bg-[#2C2D32] text-white text-xs font-medium flex items-center gap-2 border border-white/5 shadow-sm transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
             >
               <Archive size={14} className="text-[#E85A3C]" />
-              <span className="hidden sm:inline">Export as ZIP</span>
-              <span className="sm:hidden">Export</span>
+              <span>Export as ZIP</span>
               <ChevronDown
                 size={13}
                 className={`text-[#8E9094] transition-transform duration-200 ${
@@ -419,7 +428,7 @@ export const AxonSourceScreen: React.FC<AxonSourceScreenProps> = ({
                 {/* Option 1: WITHOUT user data */}
                 <button
                   onClick={() => handleExportZip(false)}
-                  className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 active:bg-white/10 text-xs transition-colors flex flex-col gap-0.5 group"
+                  className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 active:bg-white/10 text-xs transition-colors flex flex-col gap-0.5 group cursor-pointer"
                 >
                   <span className="font-medium text-white group-hover:text-white">
                     Export WITHOUT user data
@@ -434,7 +443,7 @@ export const AxonSourceScreen: React.FC<AxonSourceScreenProps> = ({
                 {/* Option 2: WITH user data */}
                 <button
                   onClick={() => handleExportZip(true)}
-                  className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 active:bg-white/10 text-xs transition-colors flex flex-col gap-0.5 group"
+                  className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 active:bg-white/10 text-xs transition-colors flex flex-col gap-0.5 group cursor-pointer"
                 >
                   <span className="font-medium text-white group-hover:text-white">
                     Export WITH user data
@@ -444,6 +453,29 @@ export const AxonSourceScreen: React.FC<AxonSourceScreenProps> = ({
                   </span>
                 </button>
               </div>
+            )}
+          </div>
+        </div>
+
+        {/* Row 4: Search/filter bar with clear spacing separating it from row above */}
+        <div className="pt-2 pb-1">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#1C1D21] border border-white/5 text-xs text-white focus-within:border-white/20 transition-colors">
+            <Search size={14} className="text-[#7A7C82] shrink-0" />
+            <input
+              type="text"
+              placeholder="Filter files in project..."
+              value={filterQuery}
+              onChange={(e) => setFilterQuery(e.target.value)}
+              className="w-full bg-transparent outline-none text-xs text-white placeholder-[#686A70]"
+            />
+            {filterQuery && (
+              <button
+                onClick={() => setFilterQuery('')}
+                aria-label="Clear filter"
+                className="text-[#7A7C82] hover:text-white cursor-pointer"
+              >
+                <X size={13} />
+              </button>
             )}
           </div>
         </div>
@@ -457,29 +489,6 @@ export const AxonSourceScreen: React.FC<AxonSourceScreenProps> = ({
             mobileView === 'tree' ? 'flex' : 'hidden'
           } md:flex flex-col w-full md:w-80 lg:w-88 shrink-0 bg-[#141517] border-r border-white/5 h-full overflow-hidden select-none`}
         >
-          {/* Search / Filter Box */}
-          <div className="p-3 border-b border-white/5">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#1C1D21] border border-white/5 text-xs text-white focus-within:border-white/20 transition-colors">
-              <Search size={14} className="text-[#7A7C82] shrink-0" />
-              <input
-                type="text"
-                placeholder="Filter files in project..."
-                value={filterQuery}
-                onChange={(e) => setFilterQuery(e.target.value)}
-                className="w-full bg-transparent outline-none text-xs text-white placeholder-[#686A70]"
-              />
-              {filterQuery && (
-                <button
-                  onClick={() => setFilterQuery('')}
-                  aria-label="Clear filter"
-                  className="text-[#7A7C82] hover:text-white"
-                >
-                  <X size={13} />
-                </button>
-              )}
-            </div>
-          </div>
-
           {/* Tree Scroll Area */}
           <div className="flex-1 overflow-y-auto p-2 space-y-0.5">
             {isLoadingTree ? (
